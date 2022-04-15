@@ -20,6 +20,8 @@ public class Main {
   }
 
   private static void printParticipant(Participant participant) {
-    System.out.printf("%s, %s%n", participant.getFullName(), participant.getDuration());
+    System.out.printf(
+        "%s, %s%n",
+        participant.getFullName(), FriendlyDuration.toFriendlyString(participant.getDuration()));
   }
 }

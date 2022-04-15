@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +43,8 @@ public class ReportParser {
       this.meetingTitle = headers.get("Meeting Title");
       this.meetingStartTime = parseDateTime(headers.get("Meeting Start Time"));
       this.meetingEndTime = parseDateTime(headers.get("Meeting End Time"));
-      this.meetingDuration =
-          DateTimeParser.computeMeetingDuration(meetingStartTime, meetingEndTime);
+      this.meetingDuration = Duration.between(meetingStartTime, meetingEndTime);
+
       this.meetingId = headers.get("Meeting Id");
 
       // parse the table of participants
@@ -112,7 +113,7 @@ public class ReportParser {
       final Participant matchingParticipant = participants.get(participant.getId());
 
       if (matchingParticipant != null) {
-        matchingParticipant.getDuration().add(participant.getDuration());
+        matchingParticipant.addDuration(participant.getDuration());
       } else {
         participants.put(participant.getId(), participant);
       }
@@ -126,7 +127,7 @@ public class ReportParser {
         values[tableHeaders.get("Full Name")],
         parseDateTime(values[tableHeaders.get("Join Time")]),
         parseDateTime(values[tableHeaders.get("Leave Time")]),
-        new Duration(values[tableHeaders.get("Duration")]),
+        FriendlyDuration.parse(values[tableHeaders.get("Duration")]),
         values[tableHeaders.get("Email")],
         values[tableHeaders.get("Role")],
         values[tableHeaders.get("Participant ID (UPN)")]);

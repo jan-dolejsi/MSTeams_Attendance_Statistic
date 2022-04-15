@@ -4,14 +4,15 @@ import static java.lang.String.format;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.*;
 
 /** Meeting summary */
 public class Meeting {
 
   /**
-   * percentage of the meeting duration that a participant needs to be counted in the sum (e.g. 10%
-   * = 0.1)
+   * Fraction of meeting duration that is the threshold for participants to be counted in as
+   * eligible (e.g. pass {@code 0.1} for {@code 10%})
    */
   final double requiredDurationFraction;
 
@@ -35,16 +36,16 @@ public class Meeting {
 
   private void findEligibleAttendees() {
     final double minAttendanceInSeconds =
-        requiredDurationFraction * this.meetingDuration.getTotalSeconds();
+        requiredDurationFraction * this.meetingDuration.getSeconds();
 
     for (Participant p : participants.values()) {
-      if (p.getDuration().getTotalSeconds() >= minAttendanceInSeconds) {
+      if (p.getDuration().getSeconds() >= minAttendanceInSeconds) {
         eligibleParticipants.add(p);
       }
     }
 
     eligibleParticipants.sort(
-        Comparator.<Participant>comparingInt(p -> p.getDuration().getTotalSeconds()).reversed());
+        Comparator.<Participant>comparingLong(p -> p.getDuration().getSeconds()).reversed());
   }
 
   @Override

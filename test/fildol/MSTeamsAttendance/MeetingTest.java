@@ -3,8 +3,6 @@ package fildol.MSTeamsAttendance;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import fildol.MSTeamsAttendance.Meeting;
-import fildol.MSTeamsAttendance.Participant;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -25,7 +23,7 @@ class MeetingTest {
 
   private void assertParticipantEquals(Participant participant, String expectedDuration) {
     assertNotNull(participant);
-    assertEquals(participant.getDuration().toString(), expectedDuration);
+    assertEquals(FriendlyDuration.toFriendlyString(participant.getDuration()), expectedDuration);
   }
 
   @org.junit.jupiter.api.Test
