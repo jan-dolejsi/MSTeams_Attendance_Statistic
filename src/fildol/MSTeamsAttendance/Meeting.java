@@ -57,7 +57,7 @@ public class Meeting {
         + " participants that attended more than "
         + requiredDurationFraction * 100
         + "% of full meeting time of "
-        + meetingDuration;
+        + FriendlyDuration.toFriendlyString(meetingDuration);
   }
 
   public int getQualifyingParticipantCount() {
